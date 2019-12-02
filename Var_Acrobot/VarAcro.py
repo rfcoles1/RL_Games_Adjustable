@@ -6,11 +6,24 @@ from gym.utils import seeding
 
 """
 Slightly Modified version of the Acrobot environment as seen in OpenAI Gym.
-Original code can be found at: github.com/openai/gym
+Accessed from: github.com/openai/gym
+
+A height parameter can be set in reset()
+Adjusts the hieight of the target bar
+
+Original credits:
+__copyright__ = "Copyright 2013, RLPy http://acl.mit.edu/RLPy"
+__credits__ = ["Alborz Geramifard", "Robert H. Klein", "Christoph Dann",
+               "William Dabney", "Jonathan P. How"]
+__license__ = "BSD 3-Clause"
+__author__ = "Christoph Dann <cdann@cdann.de>"
+
+# SOURCE:
+# https://github.com/rlpy/rlpy/blob/master/rlpy/Domains/Acrobot.py
 """
 
 class Var_Acro_Env(core.Env):
-    def __init__(self):
+    def __init__(self):#class parameters moved into init
         self.dt = .2
 
         self.LinkLength1 = 1.  # [m]
@@ -42,7 +55,7 @@ class Var_Acro_Env(core.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def reset(self, h):
+    def reset(self, h): #added a height parameter into the reset method 
         self.h = h
         self.state = self.np_random.uniform(low=-0.1, high=0.1, size=(4,))
         return self._get_ob()
@@ -65,8 +78,8 @@ class Var_Acro_Env(core.Env):
 
         ns[0] = wrap(ns[0], -pi, pi)
         ns[1] = wrap(ns[1], -pi, pi)
-        ns[2] = bound(ns[2], -self.MaxVel1, self.MAX_VEL_1)
-        ns[3] = bound(ns[3], -self.MaxVel2, self.MAX_VEL_2)
+        ns[2] = bound(ns[2], -self.MaxVel1, self.MaxVel1)
+        ns[3] = bound(ns[3], -self.MaxVel2, self.MaxVel2)
         self.state = ns
         
         terminal = self._terminal()
@@ -77,9 +90,8 @@ class Var_Acro_Env(core.Env):
         s = self.state
         return np.array([cos(s[0]), np.sin(s[0]), cos(s[1]), sin(s[1]), s[2], s[3]])
 
-    """
-    The target can be adjusted as the agent learns to increase/decrease difficulty
-    """
+    
+    #The target can be adjusted as the agent learns to increase/decrease difficulty
     def _terminal(self):
         s = self.state
         return bool(-np.cos(s[0]) - np.cos(s[1] + s[0]) > self.h)
@@ -117,7 +129,6 @@ class Var_Acro_Env(core.Env):
         from gym.envs.classic_control import rendering
 
         s = self.state
-
         if self.viewer is None:
             self.viewer = rendering.Viewer(500,500)
             bound = self.LinkLength1 + self.LinkLength2 + 0.2  # 2.2 for default

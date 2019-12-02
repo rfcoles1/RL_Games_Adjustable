@@ -5,18 +5,9 @@ from gym.envs.registration import register
 #Mountain Car environment with an adjustable hill height
 register(
     id='Var_MC-v0',
-    entry_point='Var_Games.Var_MountainCar.VarMC_BothSides:VMC_Env',
+    entry_point='Var_Games.Var_MountainCar.VarMC:VMC_Env',
     max_episode_steps = 200,
 )
-
-"""
-Not finished - Environment where only the right hill changed height
-register(
-    id='Var_MC-v1',
-    entry_point='Var_Games.Var_MountainCar.VarMC_RightSide:VMC_Env',
-    max_episode_steps = 200,
-)
-"""
 
 #Acrobot environment with an adjustable height target
 register(
@@ -30,7 +21,7 @@ register(
 
 #Carnot heat engine environment with an adjustable step size (dV)
 register(
-    id='Var_Car-v0',
+    id='Var_Carnot-v0',
     entry_point='Var_Games.Var_Carnot.carnot:CarnotEnv',
     max_episode_steps = 500,
 )
